@@ -1,0 +1,31 @@
+{
+	"scopeName": "source.mcjs",
+	"injectionSelector": "L:source.js -string -comment",
+	"patterns": [
+		{
+			"include": "#mcjs-tagged-template"
+		}
+	],
+	"repository": {
+		"mcjs-tagged-template": {
+			"begin": "([a-zA-Z_]\\w*)(\\.[a-zA-Z_]\\w*)*`",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.function.tagged-template.js"
+				}
+			},
+			"end": "`",
+			"endCaptures": {
+				"0": {
+					"name": "string.template.js"
+				}
+			},
+			"contentName": "meta.embedded.block.mcjs",
+			"patterns": [
+				{
+					"include": "source.mcfunction"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,33 @@
+{
+	"name": "mcjspacker-vscode",
+	"displayName": "mcjspacker-vscode",
+	"description": "VSCode support for mcjspacker",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.101.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"activationEvents": [
+		"onLanguage:javascript"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"grammars": [
+			{
+				"scopeName": "source.mcjs",
+				"path": "./syntaxes/injection.json",
+				"injectTo": [
+					"source.js"
+				],
+				"embeddedLanguages": {
+					"meta.embedded.block.mcjs": "source.mcfunction"
+				}
+			}
+		]
+	},
+	"dependencies": {
+		"@vscode/vsce": "^3.6.0"
+	}
+}
