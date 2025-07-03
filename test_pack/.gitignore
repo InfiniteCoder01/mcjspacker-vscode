@@ -1,6 +1,0 @@
-# environment
-node_modules/
-.vscode/
-
-# generated files
-data/test/function/

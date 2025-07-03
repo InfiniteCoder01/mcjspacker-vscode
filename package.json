@@ -3,6 +3,7 @@
 	"displayName": "mcjspacker-vscode",
 	"description": "VSCode support for mcjspacker",
 	"repository": "https://github.com/InfiniteCoder01/mcjspacker-vscode.git",
+	"publisher": "InfiniteCoder",
 	"readme": "README.md",
 	"version": "0.0.1",
 	"engines": {
