@@ -1,51 +1,14 @@
 import * as vscode from 'vscode';
 import { regex } from 'regex';
-import * as fs from 'node:fs';
 
 import { TypedBrigadierArgument, BrigadierCommand, McLanguageServer } from './mcls';
+import * as commands from './commands_data/commands.json';
+import * as registries from './commands_data/registries.json';
 
 export function activate(context: vscode.ExtensionContext) {
     const provider = new McLanguageServer();
-    fs.readFile(context.asAbsolutePath('commands.txt'), (err, data) => {
-        if (err) throw err;
-        const lines = data.toString().split('\n');
-        lines.splice(0, 1), lines.pop();
-
-        let currentNodes: BrigadierCommand[][] = [[new BrigadierCommand('', false)]];
-        let argumentTypes = new Set();
-        for (const line of lines) {
-            const tline = line.trimStart();
-            const depth = (line.length - tline.length) / 2;
-            currentNodes.splice(depth);
-
-            let currentNodeVariants = currentNodes[depth - 1];
-            const inlineNodes = tline.split('    >    ');
-            for (const inlineNode of inlineNodes) {
-                const variants = inlineNode.split(' | ');
-                const nextNodeVariants = variants.map(variant => {
-                    const callable = variant.endsWith('()');
-                    if (callable) variant = variant.substring(0, variant.length - 2);
-
-                    if (variant.startsWith('"') && variant.endsWith('"')) {
-                        return new BrigadierCommand(variant.substring(1, variant.length - 1), callable);
-                    }
-
-                    argumentTypes.add(variant.split(' ')[0]);
-                    return new BrigadierCommand(new TypedBrigadierArgument(
-                        variant.split(' ')[0],
-                        variant.split(' ')[1]
-                    ), callable);
-                });
-
-                for (const variant of currentNodeVariants) variant.next.push(...nextNodeVariants);
-                currentNodeVariants = nextNodeVariants;
-            }
-
-            currentNodes.push(currentNodeVariants);
-        }
-
-        provider.commands.next.push(...currentNodes[0][0].next);
-    });
+    provider.commands_root = commands;
+    provider.registries = registries;
 
     context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider(
