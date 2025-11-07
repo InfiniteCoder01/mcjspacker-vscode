@@ -29,12 +29,11 @@
 	"activationEvents": [
 		"onLanguage:javascript"
 	],
-	"main": "./out/extension.js",
+	"main": "./dist/extension.js",
 	"scripts": {
-		"vscode:prepublish": "bun run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint",
-		"watch": "tsc -watch -p ./"
+		"compile": "bun esbuild.js",
+		"watch": "bun esbuild.js --watch",
+		"vscode:prepublish": "bun esbuild.js --production"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
@@ -46,6 +45,7 @@
 		"typescript-eslint": "^8.26.0"
 	},
 	"dependencies": {
+		"esbuild": "^0.25.12",
 		"regex": "^6.0.1"
 	}
 }
