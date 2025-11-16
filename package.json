@@ -16,18 +16,17 @@
 		"grammars": [
 			{
 				"scopeName": "source.mcjs",
-				"path": "./syntaxes/injection.json",
+				"path": "./syntaxes/injection.tmLanguage.json",
 				"injectTo": [
-					"source.js"
-				],
-				"embeddedLanguages": {
-					"meta.embedded.block.mcjs": "source.mcfunction"
-				}
+					"source.js",
+					"source.ts"
+				]
 			}
 		]
 	},
 	"activationEvents": [
-		"onLanguage:javascript"
+		"onLanguage:javascript",
+		"onLanguage:typescript"
 	],
 	"main": "./dist/extension.js",
 	"scripts": {

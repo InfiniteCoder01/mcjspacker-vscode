@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { regex } from 'regex';
 
-import { TypedBrigadierArgument, BrigadierCommand, McLanguageServer } from './mcls';
+import { McLanguageServer } from './mcls';
 import * as commands from './commands_data/commands.json';
 import * as registries from './commands_data/registries.json';
 
@@ -15,12 +15,15 @@ export function activate(context: vscode.ExtensionContext) {
             { language: 'mcfunction' },
             provider,
             ' '
-        )
-    );
-
-    context.subscriptions.push(
+        ),
         vscode.languages.registerCompletionItemProvider(
             { language: 'javascript' },
+            new McJsLanguageServer(provider),
+            ' '
+        ),
+
+        vscode.languages.registerCompletionItemProvider(
+            { language: 'typescript' },
             new McJsLanguageServer(provider),
             ' '
         )
@@ -29,8 +32,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 // TODO: Fix this regex
 const BLOCK_REGEX = regex('g')`
-(?<prefix>\w+(\.\w+)*\s*[\`])
-(?<content>[^\`]*)
+[\`]
+(?<content>([^\`]|\\.)*)
 [\`]
 `;
 
@@ -45,7 +48,9 @@ class McJsLanguageServer implements vscode.CompletionItemProvider {
         token: vscode.CancellationToken,
         context: vscode.CompletionContext
     ): Promise<vscode.CompletionItem[]> {
+        console.log("Callback!");
         const codeBlock = this.getMCFBlockCode(document, position);
+        console.log(codeBlock);
         if (!codeBlock) return [];
 
         const [virtualDocument, virtualPosition, offset] = codeBlock;
@@ -81,7 +86,7 @@ class McJsLanguageServer implements vscode.CompletionItemProvider {
 
         for (const match of text.matchAll(BLOCK_REGEX)) {
             if (!match.groups) continue;
-            const textStart = match.index + match.groups.prefix.length;
+            const textStart = match.index + 1;
             const textEnd = textStart + match.groups.content.length;
             if (textStart > offset) return null;
             if (textEnd < offset) continue;

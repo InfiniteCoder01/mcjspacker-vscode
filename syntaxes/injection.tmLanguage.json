@@ -1,0 +1,22 @@
+{
+	"scopeName": "source.mcjs",
+	"fileTypes": [],
+	"injectionSelector": "string.template.js, string.template.ts",
+	"patterns": [
+		{
+			"include": "#mcjs-tagged-template"
+		}
+	],
+	"repository": {
+		"mcjs-tagged-template": {
+			"begin": "(?<=`)",
+			"end": "(?=`)",
+			"contentName": "meta.embedded.mcjs",
+			"patterns": [
+				{
+					"include": "source.mcfunction"
+				}
+			]
+		}
+	}
+}
